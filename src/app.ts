@@ -9,7 +9,7 @@ import { timing } from "hono/timing";
 import errorHandler from "./middlewares/error.middleware";
 
 import authRoutes from "./routes/auth.routes";
-import iamRoutes from "./routes/iam.routes";
+import userRoutes from "./routes/user.routes";
 
 import { corsConfig } from "./config/cors.config";
 
@@ -26,7 +26,7 @@ const app = new Hono()
 
 	// Routes
 	.route("/auth", authRoutes)
-	.route("/user", iamRoutes)
+	.route("/user", userRoutes)
 	.onError(errorHandler);
 
 export type AppType = typeof app;

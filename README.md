@@ -28,7 +28,7 @@ This is a Hono-based backend API application designed for user authentication an
 - **App Core** (`src/app.ts`): Sets up the Hono app with base path `/api`, applies global middlewares, and mounts routes
 - **Routes**:
   - `/auth`: Handles sign-up, sign-in, provider-based auth (Google/Apple), and token refresh
-  - `/iam`: Protected endpoints for user identity management
+  - `/user`: Protected endpoints for user identity management
 - **Middlewares**:
   - Auth middleware: Verifies user sessions using Supabase
   - Error handling, Swagger UI for API docs, and Zod validation for request bodies
@@ -181,5 +181,5 @@ src/
 ├── middlewares/          # Hono middlewares
 ├── routes/               # API routes
 │   ├── auth.routes.ts
-│   └── iam.routes.ts
+│   └── user.routes.ts
 ```

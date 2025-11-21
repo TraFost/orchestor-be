@@ -10,7 +10,7 @@ import type {
 	SignUpResponseData,
 	AuthSessionData,
 } from "@/types/auth/auth.type";
-import type { User } from "@/types/iam/iam.type";
+import type { User } from "@/types/user/user.type";
 
 export class AuthService {
 	static async signUp({

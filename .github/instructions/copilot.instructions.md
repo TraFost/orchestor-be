@@ -59,17 +59,17 @@ src/
 │   └── zod-validator.middleware.ts
 ├── routes/             # Route definitions
 │   ├── auth.routes.ts
-│   └── iam.routes.ts
+│   └── user.routes.ts
 ├── services/           # Business logic layer
 │   ├── auth.service.ts
-│   └── iam.service.ts
+│   └── user.service.ts
 └── types/              # TypeScript type definitions
     ├── common.type.ts
     ├── auth/
     │   ├── auth.type.ts
     │   └── auth.dto.ts
-    └── iam/
-        └── iam.type.ts
+    └── user/
+        └── user.type.ts
 ```
 
 ### Key Patterns
@@ -93,7 +93,7 @@ interface ApiResponse<T = unknown> {
 
 #### 3. Route Organization
 
-- Routes are organized by feature/domain (`auth`, `iam`, etc.)
+- Routes are organized by feature/domain (`auth`, `user`, etc.)
 - Each route file exports a Hono instance with related endpoints
 - Routes use middleware for validation, authentication, etc.
 

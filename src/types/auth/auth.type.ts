@@ -1,4 +1,4 @@
-import type { User } from "../iam/iam.type";
+import type { User } from "../user/user.type";
 
 export interface SignUpData {
 	email: string;

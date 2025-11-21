@@ -1,8 +1,8 @@
 import type { ApiResponse } from "@/types/common.type";
-import type { User } from "@/types/iam/iam.type";
+import type { User } from "@/types/user/user.type";
 import { StatusCodes } from "http-status-codes";
 
-export class IamService {
+export class UserService {
 	static async getUserProfile(user: User): Promise<ApiResponse<User | null>> {
 		try {
 			return {

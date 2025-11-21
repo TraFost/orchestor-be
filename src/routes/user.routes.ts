@@ -3,10 +3,10 @@ import { HTTPException } from "hono/http-exception";
 import type { StatusCode } from "hono/utils/http-status";
 
 import authMiddleware from "@/middlewares/auth.middleware";
-import { IamService } from "@/services/iam.service";
+import { UserService } from "@/services/user.service";
 
 import type { ApiResponse } from "@/types/common.type";
-import type { User } from "@/types/iam/iam.type";
+import type { User } from "@/types/user/user.type";
 import { StatusCodes } from "http-status-codes";
 
 type Variables = {
@@ -19,7 +19,7 @@ type Variables = {
 	};
 };
 
-function handleIamResponse(result: ApiResponse<User | null>) {
+function handleUserResponse(result: ApiResponse<User | null>) {
 	if (result.status !== StatusCodes.OK) {
 		throw new HTTPException(result.status as StatusCode, {
 			message: result.message,
@@ -29,16 +29,16 @@ function handleIamResponse(result: ApiResponse<User | null>) {
 	return result;
 }
 
-const iamRoutes = new Hono<{ Variables: Variables }>()
+const userRoutes = new Hono<{ Variables: Variables }>()
 	.use("*", authMiddleware)
 	.get("/me", async (c) => {
 		const user = c.get("user");
 
-		const result = await IamService.getUserProfile(user);
+		const result = await UserService.getUserProfile(user);
 
-		const iamResult = handleIamResponse(result);
+		const userResult = handleUserResponse(result);
 
-		return c.json(iamResult);
+		return c.json(userResult);
 	});
 
-export default iamRoutes;
+export default userRoutes;
