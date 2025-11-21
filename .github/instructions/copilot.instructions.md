@@ -23,7 +23,6 @@ This document provides comprehensive guidelines for AI assistants working on the
 - `hono`: Web framework
 - `@supabase/supabase-js`: Supabase client
 - `zod`: Schema validation
-- `@hono/zod-openapi`: OpenAPI documentation
 - `http-status-codes`: HTTP status code constants
 
 ### Development Tools
@@ -229,7 +228,6 @@ export default exampleRoutes;
 ### Zod Schema Usage
 
 - **Validation**: Use Zod for runtime type validation
-- **OpenAPI**: Generate API documentation from Zod schemas
 - **Type Inference**: Use `z.infer<>` to create TypeScript types from schemas
 
 ## Error Handling
