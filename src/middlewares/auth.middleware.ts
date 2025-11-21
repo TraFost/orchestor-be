@@ -27,8 +27,6 @@ const authMiddleware: MiddlewareHandler = async (c, next) => {
 			id: data.user.id,
 			email: data.user.email!,
 			fullname: userInfo?.fullname || null,
-			created_at: userInfo?.created_at || data.user.created_at,
-			updated_at: userInfo?.updated_at || data.user.updated_at,
 		});
 	} else {
 		console.error("Error while getting user by access_token ", error);
