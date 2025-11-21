@@ -34,8 +34,6 @@ const iamRoutes = new Hono<{ Variables: Variables }>()
 	.get("/me", async (c) => {
 		const user = c.get("user");
 
-		console.log(user, "<<user");
-
 		const result = await IamService.getUserProfile(user);
 
 		const iamResult = handleIamResponse(result);
