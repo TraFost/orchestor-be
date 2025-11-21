@@ -1,8 +1,9 @@
 import { supabase } from "@/libs/supabase/client";
-import { type MiddlewareHandler } from "hono";
 import { getCookie } from "hono/cookie";
 import { HTTPException } from "hono/http-exception";
 import { StatusCodes } from "http-status-codes";
+
+import type { MiddlewareHandler } from "hono";
 
 const authMiddleware: MiddlewareHandler = async (c, next) => {
 	const access_token = getCookie(c, "access_token");
@@ -11,11 +12,11 @@ const authMiddleware: MiddlewareHandler = async (c, next) => {
 	if (data.user) {
 		const { data: userInfo, error: profileError } = await supabase
 			.from("user_information")
-			.select("fullname")
+			.select("fullname, created_at, updated_at")
 			.eq("id", data.user.id)
 			.single();
 
-		if (profileError) {
+		if (profileError && profileError.code !== "PGRST116") {
 			console.error("Error fetching user information:", profileError);
 			throw new HTTPException(StatusCodes.INTERNAL_SERVER_ERROR, {
 				message: "Error fetching user information",
@@ -24,8 +25,10 @@ const authMiddleware: MiddlewareHandler = async (c, next) => {
 
 		c.set("user", {
 			id: data.user.id,
-			email: data.user.email,
+			email: data.user.email!,
 			fullname: userInfo?.fullname || null,
+			created_at: userInfo?.created_at || data.user.created_at,
+			updated_at: userInfo?.updated_at || data.user.updated_at,
 		});
 	} else {
 		console.error("Error while getting user by access_token ", error);
