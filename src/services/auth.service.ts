@@ -10,6 +10,7 @@ import type {
 	SignUpResponseData,
 	AuthSessionData,
 } from "@/types/auth/auth.type";
+import type { User } from "@/types/iam/iam.type";
 
 export class AuthService {
 	static async signUp({
@@ -124,10 +125,23 @@ export class AuthService {
 				};
 			}
 
+			if (!data?.user) {
+				return {
+					status: StatusCodes.UNAUTHORIZED,
+					data: null,
+					message: "Sign in failed - no user data returned",
+				};
+			}
+
+			const user: User = {
+				id: data.user.id,
+				email: data.user.email!,
+			};
+
 			return {
 				status: StatusCodes.OK,
 				data: {
-					user: data.user,
+					user,
 					session: data.session,
 				},
 				message: "Sign in successful",
@@ -163,10 +177,39 @@ export class AuthService {
 				};
 			}
 
+			if (!data?.user) {
+				return {
+					status: StatusCodes.UNAUTHORIZED,
+					data: null,
+					message: "Sign in with provider failed - no user data returned",
+				};
+			}
+
+			const { data: userInfo, error: userInfoError } = await supabase
+				.from("user_information")
+				.select("fullname, created_at, updated_at")
+				.eq("id", data.user.id)
+				.single();
+
+			if (userInfoError && userInfoError.code !== "PGRST116") {
+				console.error("Error fetching user information:", userInfoError);
+				return {
+					status: StatusCodes.INTERNAL_SERVER_ERROR,
+					data: null,
+					message: "Error fetching user profile",
+				};
+			}
+
+			const user: User = {
+				id: data.user.id,
+				email: data.user.email!,
+				fullname: userInfo?.fullname || null,
+			};
+
 			return {
 				status: StatusCodes.OK,
 				data: {
-					user: data.user,
+					user,
 					session: data.session,
 				},
 				message: "Sign in with provider successful",

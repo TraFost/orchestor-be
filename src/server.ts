@@ -2,7 +2,7 @@ import { serve } from "@hono/node-server";
 import { showRoutes } from "hono/dev";
 
 import app from "./app";
-import { env } from "./config/env";
+import { env } from "./config/env.config";
 
 console.log(`Server is running on port - ${env.PORT}`);
 

@@ -11,12 +11,14 @@ import errorHandler from "./middlewares/error.middleware";
 import authRoutes from "./routes/auth.routes";
 import iamRoutes from "./routes/iam.routes";
 
+import { corsConfig } from "./config/cors.config";
+
 const app = new Hono()
 	.basePath("/api")
 
 	// Middlewares
 	.use("*", logger())
-	.use("*", cors())
+	.use("*", cors(corsConfig))
 	.use("*", csrf())
 	.use("*", prettyJSON())
 	.use("*", secureHeaders())

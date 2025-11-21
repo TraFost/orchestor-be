@@ -6,3 +6,6 @@ dist
 
 # GCP
 gcp-key.json
+
+# Etc
+internal-docs

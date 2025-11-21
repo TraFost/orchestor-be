@@ -13,7 +13,7 @@ type Variables = {
 	user: {
 		id: string;
 		email: string;
-		fullname: string | null;
+		fullname?: string;
 		created_at: string;
 		updated_at: string;
 	};
@@ -33,6 +33,8 @@ const iamRoutes = new Hono<{ Variables: Variables }>()
 	.use("*", authMiddleware)
 	.get("/me", async (c) => {
 		const user = c.get("user");
+
+		console.log(user, "<<user");
 
 		const result = await IamService.getUserProfile(user);
 

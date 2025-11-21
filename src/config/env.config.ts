@@ -10,6 +10,9 @@ const serverSchema = z.object({
 	// Supabase
 	SUPABASE_URL: z.string().min(1),
 	SUPABASE_SERVICE_ROLE: z.string().min(1),
+
+	// Client
+	CLIENT_URL: z.string().min(1),
 });
 
 const _serverEnv = serverSchema.safeParse(process.env);
@@ -22,11 +25,13 @@ if (!_serverEnv.success) {
 	throw new Error("Invalid environment variables");
 }
 
-const { SUPABASE_SERVICE_ROLE, SUPABASE_URL, PORT } = _serverEnv.data;
+const { SUPABASE_SERVICE_ROLE, SUPABASE_URL, PORT, CLIENT_URL } =
+	_serverEnv.data;
 
 export const env = {
 	SUPABASE_SERVICE_ROLE,
 	SUPABASE_URL,
+	CLIENT_URL,
 	PORT: Number(PORT) ?? 3000,
 };
 
