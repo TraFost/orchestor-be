@@ -1,6 +1,6 @@
 # Orchestor Backend
 
-A Hono + Supabase API for social media content orchestration, built for the Lab-Lab Agentic AI Hackathon.
+A Hono + Supabase API for social media content orchestration, built IBM watsonx Orchestrate Agentic AI Hackathon 2025.
 
 ## Tech Stack
 
@@ -52,3 +52,7 @@ src/
 ├── types/              # TypeScript types
 └── middlewares/        # Hono middlewares
 ```
+
+## License
+
+MIT License © 2025 AgentBunnies. See LICENSE for details.
