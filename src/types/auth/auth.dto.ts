@@ -12,7 +12,5 @@ export const SignInDto = z.object({
 });
 
 export const SignInWithProviderDto = z.object({
-	provider: z.enum(["google"]),
 	token: z.string().min(8),
-	accessToken: z.string().optional(),
 });

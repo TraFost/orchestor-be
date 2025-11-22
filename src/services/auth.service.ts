@@ -157,42 +157,31 @@ export class AuthService {
 	}
 
 	static async signInWithProvider({
-		provider,
 		token,
-		accessToken,
-	}: SignInWithProviderData): Promise<ApiResponse<AuthSessionData | null>> {
+	}: {
+		token: string;
+	}): Promise<ApiResponse<AuthSessionData | null>> {
 		try {
-			const { data, error } = await supabase.auth.signInWithIdToken({
-				provider,
-				token,
-				access_token: accessToken,
-			});
+			const {
+				data: { user },
+				error,
+			} = await supabase.auth.getUser(token);
 
-			if (error) {
-				console.error("Error while signing in with Provider ", error);
+			if (error || !user) {
 				return {
 					status: StatusCodes.UNAUTHORIZED,
 					data: null,
-					message: error.message,
-				};
-			}
-
-			if (!data?.user) {
-				return {
-					status: StatusCodes.UNAUTHORIZED,
-					data: null,
-					message: "Sign in with provider failed - no user data returned",
+					message: "Invalid or expired Supabase session token",
 				};
 			}
 
 			const { data: userInfo, error: userInfoError } = await supabase
 				.from("user_information")
 				.select("fullname, created_at, updated_at")
-				.eq("id", data.user.id)
+				.eq("id", user.id)
 				.single();
 
 			if (userInfoError && userInfoError.code !== "PGRST116") {
-				console.error("Error fetching user information:", userInfoError);
 				return {
 					status: StatusCodes.INTERNAL_SERVER_ERROR,
 					data: null,
@@ -200,22 +189,22 @@ export class AuthService {
 				};
 			}
 
-			const user: User = {
-				id: data.user.id,
-				email: data.user.email!,
-				fullname: userInfo?.fullname || null,
-			};
-
 			return {
 				status: StatusCodes.OK,
 				data: {
-					user,
-					session: data.session,
+					user: {
+						id: user.id,
+						email: user.email!,
+						fullname: userInfo?.fullname || null,
+					},
+					session: {
+						access_token: token,
+						// expires_at: null,
+					},
 				},
 				message: "Sign in with provider successful",
 			};
-		} catch (error) {
-			console.error("Sign in with provider error:", error);
+		} catch {
 			return {
 				status: StatusCodes.INTERNAL_SERVER_ERROR,
 				data: null,

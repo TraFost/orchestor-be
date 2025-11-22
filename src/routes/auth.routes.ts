@@ -3,7 +3,6 @@ import { StatusCodes } from "http-status-codes";
 
 import { HTTPException } from "hono/http-exception";
 import { setCookie } from "hono/cookie";
-import { endTime, startTime } from "hono/timing";
 import type { StatusCode } from "hono/utils/http-status";
 
 import { AuthService } from "@/services/auth.service";
@@ -76,17 +75,11 @@ const authRoutes = new Hono()
 		"/sign-in-with-provider",
 		zValidator("json", SignInWithProviderDto),
 		async (c) => {
-			const { token, provider, accessToken } = c.req.valid("json");
-
-			startTime(c, "supabase.auth.signInWithProvider");
+			const { token } = c.req.valid("json");
 
 			const result = await AuthService.signInWithProvider({
-				provider,
 				token,
-				accessToken,
 			});
-
-			endTime(c, "supabase.auth.signInWithProvider");
 
 			const authResult = handleAuthResponse(result, c);
 
