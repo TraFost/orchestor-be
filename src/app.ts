@@ -10,6 +10,8 @@ import errorHandler from "./middlewares/error.middleware";
 
 import authRoutes from "./routes/auth.routes";
 import userRoutes from "./routes/user.routes";
+import tasksRoutes from "./routes/tasks.routes";
+import dashboardRoutes from "./routes/dashboard.routes";
 
 import { corsConfig } from "./config/cors.config";
 
@@ -27,6 +29,8 @@ const app = new Hono()
 	// Routes
 	.route("/auth", authRoutes)
 	.route("/user", userRoutes)
+	.route("/tasks", tasksRoutes)
+	.route("/dashboard", dashboardRoutes)
 	.onError(errorHandler);
 
 export type AppType = typeof app;
