@@ -167,6 +167,66 @@ pnpm start
 
 See `FRONTEND_AUTH_INTEGRATION.md` for detailed frontend integration guide.
 
+### Task Scheduling
+
+- `POST /api/tasks/preview` — Generates agent-powered preview data for raw tasks.
+- `POST /api/tasks/schedule` — Accepts finalized preview posts and persists them to the `scheduled_posts` table.
+- `GET /api/tasks/schedule` — Returns all scheduled posts for the authenticated user ordered by `scheduled_time`.
+
+`/api/tasks/schedule` expects a body like:
+
+```json
+{
+	"posts": [
+		{
+			"taskId": "raw-task-id",
+			"account": "@brand",
+			"platform": "instagram",
+			"caption": "Final caption",
+			"assetUrl": "https://...",
+			"tags": ["launch", "promo"],
+			"scheduledTime": "2025-11-22T18:00:00.000Z",
+			"project": "Campaign A",
+			"section": "Week 1"
+		}
+	]
+}
+```
+
+On success it returns the inserted `scheduled_posts` rows so the client can update state immediately.
+
+### Dashboard
+
+- `GET /api/dashboard/summary` — Returns aggregate counts plus the next five upcoming scheduled posts for the authenticated user.
+- `GET /api/dashboard/today` — Lists every post scheduled for the current day ordered by time.
+- `GET /api/dashboard/recent` — Returns the ten most recent scheduled or published posts ordered by `scheduled_time` descending.
+
+`/api/dashboard/summary` responds with:
+
+```json
+{
+	"status": 200,
+	"data": {
+		"totalScheduled": 4,
+		"totalPublished": 12,
+		"upcomingCount": 3,
+		"todayCount": 2,
+		"upcomingPosts": [
+			{
+				"id": "...",
+				"platform": "instagram",
+				"scheduled_time": "2025-11-22T18:00:00.000Z",
+				"status": "SCHEDULED",
+				"caption": "..."
+			}
+		]
+	},
+	"message": "Dashboard summary fetched successfully"
+}
+```
+
+The `today` and `recent` endpoints mirror the same `Post` shape so the frontend can reuse rendering components.
+
 ## Project Structure
 
 ```
