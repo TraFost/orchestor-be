@@ -6,7 +6,6 @@ import type { ApiResponse } from "@/types/common.type";
 import type {
 	SignUpData,
 	SignInData,
-	SignInWithProviderData,
 	SignUpResponseData,
 	AuthSessionData,
 } from "@/types/auth/auth.type";
