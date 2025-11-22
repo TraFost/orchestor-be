@@ -68,3 +68,19 @@ export interface PreviewResponse {
 		keyRisks: string[];
 	};
 }
+
+export interface SchedulePostInput {
+	taskId: string;
+	account: string | null;
+	platform: Platform;
+	caption: string;
+	assetUrl: string | null;
+	tags: string[];
+	scheduledTime: string;
+	project: string | null;
+	section: string | null;
+}
+
+export interface ScheduleRequest {
+	posts: SchedulePostInput[];
+}
