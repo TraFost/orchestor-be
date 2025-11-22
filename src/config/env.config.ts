@@ -13,6 +13,12 @@ const serverSchema = z.object({
 
 	// Client
 	CLIENT_URL: z.string().min(1),
+
+	// IBM Watson Orchestrate
+	ORCH_API_KEY: z.string().min(1),
+	ORCH_AGENT_ID: z.string().min(1),
+	ORCH_BASE_URL: z.string().min(1),
+	ORCH_TOKEN: z.string().min(1),
 });
 
 const _serverEnv = serverSchema.safeParse(process.env);
@@ -25,14 +31,26 @@ if (!_serverEnv.success) {
 	throw new Error("Invalid environment variables");
 }
 
-const { SUPABASE_SERVICE_ROLE, SUPABASE_URL, PORT, CLIENT_URL } =
-	_serverEnv.data;
+const {
+	SUPABASE_SERVICE_ROLE,
+	SUPABASE_URL,
+	PORT,
+	CLIENT_URL,
+	ORCH_API_KEY,
+	ORCH_AGENT_ID,
+	ORCH_BASE_URL,
+	ORCH_TOKEN,
+} = _serverEnv.data;
 
 export const env = {
 	SUPABASE_SERVICE_ROLE,
 	SUPABASE_URL,
 	CLIENT_URL,
 	PORT: Number(PORT) ?? 3000,
+	ORCH_API_KEY,
+	ORCH_AGENT_ID,
+	ORCH_BASE_URL,
+	ORCH_TOKEN,
 };
 
 console.log("Environment variables loaded");
