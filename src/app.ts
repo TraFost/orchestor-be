@@ -6,14 +6,14 @@ import { logger } from "hono/logger";
 import { prettyJSON } from "hono/pretty-json";
 import { timing } from "hono/timing";
 
-import errorHandler from "./middlewares/error.middleware.js";
+import errorHandler from "./middlewares/error.middleware";
 
-import authRoutes from "./routes/auth.routes.js";
-import userRoutes from "./routes/user.routes.js";
-import tasksRoutes from "./routes/tasks.routes.js";
-import dashboardRoutes from "./routes/dashboard.routes.js";
+import authRoutes from "./routes/auth.routes";
+import userRoutes from "./routes/user.routes";
+import tasksRoutes from "./routes/tasks.routes";
+import dashboardRoutes from "./routes/dashboard.routes";
 
-import { corsConfig } from "./config/cors.config.js";
+import { corsConfig } from "./config/cors.config";
 
 const app = new Hono()
 	.get("/", (c) =>

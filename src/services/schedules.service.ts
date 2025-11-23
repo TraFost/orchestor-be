@@ -6,7 +6,7 @@ import type { ApiResponse } from "@/types/common.type";
 import type { Post } from "@/types/posts/posts.type";
 import type { SchedulePostInput } from "@/types/tasks/tasks.type";
 
-import { POST_SELECT } from "./dashboard.service.js";
+import { POST_SELECT } from "./dashboard.service";
 
 export class ScheduleService {
 	static async schedulePosts(
