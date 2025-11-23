@@ -16,8 +16,12 @@ import dashboardRoutes from "./routes/dashboard.routes";
 import { corsConfig } from "./config/cors.config";
 
 const app = new Hono()
+	.get("/", (c) =>
+		c.text(
+			"Welcome to Orchestor Backend, Built by AgentBunnies for the IBM watsonx Orchestrate Agentic AI Hackathon 2025."
+		)
+	)
 	.basePath("/api")
-
 	// Middlewares
 	.use("*", logger())
 	.use("*", cors(corsConfig))
@@ -25,7 +29,6 @@ const app = new Hono()
 	.use("*", prettyJSON())
 	.use("*", secureHeaders())
 	.use("*", timing())
-
 	// Routes
 	.route("/auth", authRoutes)
 	.route("/user", userRoutes)

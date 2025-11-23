@@ -1,6 +1,8 @@
 # Orchestor Backend
 
-A Hono + Supabase API for social media content orchestration, built IBM watsonx Orchestrate Agentic AI Hackathon 2025.
+![Orchestor Logo](public/assets/orchestor-logo.png)
+
+A Hono + Supabase API for social media content orchestration, built by AgentBunnies for the IBM watsonx Orchestrate Agentic AI Hackathon 2025.
 
 ## Tech Stack
 
@@ -25,6 +27,9 @@ A Hono + Supabase API for social media content orchestration, built IBM watsonx 
 
    - Copy `.env.example` to `.env`
    - Fill in your Supabase URL and service role key
+   - Provide your IBM Watsonx Orchestrate API key (`ORCH_API_KEY`)
+
+   The app automatically handles IBM token refresh using your API key—no manual token management needed.
 
 3. Set up Supabase project
 
