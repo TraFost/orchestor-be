@@ -8,7 +8,7 @@ console.log(`Server is running on port - ${env.PORT}`);
 
 serve({
 	fetch: app.fetch,
-	port: env.PORT,
+	port: env.PORT || 3000,
 });
 
 showRoutes(app);
