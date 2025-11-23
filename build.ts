@@ -3,14 +3,25 @@ import type { BuildOptions } from "esbuild";
 
 const options = {
 	bundle: true,
-	entryPoints: ["./src/server.ts"],
-	banner: {
-		js: "#!/usr/bin/env node",
-	},
+	entryPoints: ["./src/worker.ts"],
 	platform: "node",
-	outfile: "./dist/index.js",
+	outfile: "./dist/_worker.js",
 	minify: true,
 	format: "esm",
+	mainFields: ["module", "main"],
+	conditions: ["worker", "browser", "import"],
+	external: [
+		"fs",
+		"path",
+		"os",
+		"crypto",
+		"stream",
+		"http",
+		"https",
+		"url",
+		"zlib",
+		"punycode",
+	],
 	logLevel: "info",
 } satisfies BuildOptions;
 

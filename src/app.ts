@@ -45,23 +45,3 @@ const app = new Hono()
 export type AppType = typeof app;
 
 export { app };
-
-export default async (req: any, res: any) => {
-	const url = `https://${req.headers.host || "localhost"}${req.url}`;
-	const method = req.method;
-	const headers = new Headers();
-	for (const [key, value] of Object.entries(req.headers)) {
-		if (Array.isArray(value)) {
-			value.forEach((v) => headers.append(key, v));
-		} else if (typeof value === "string") {
-			headers.set(key, value);
-		}
-	}
-	const body = req.method !== "GET" && req.method !== "HEAD" ? req : undefined;
-	const request = new Request(url, { method, headers, body });
-	const response = (await app.fetch(request)) as any;
-	res.statusCode = response.status;
-	response.headers.forEach((value: any, key: any) => res.setHeader(key, value));
-	const responseBody = await response.text();
-	res.end(responseBody);
-};

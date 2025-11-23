@@ -7,5 +7,9 @@ dist
 # GCP
 gcp-key.json
 
+# Cloudflare Workers
+wrangler.toml
+
 # Etc
 internal-docs
+.vercel

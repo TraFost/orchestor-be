@@ -1,0 +1,14 @@
+name = "orchestor-be"
+main = "dist/_worker.js"
+compatibility_date = "2024-01-01"
+compatibility_flags = ["nodejs_compat"]
+
+[vars]
+SUPABASE_URL = "your_supabase_url_here"
+CLIENT_URL = "your_client_url_here"
+ORCH_API_KEY = "your_orch_api_key_here"
+ORCH_AGENT_ID = "your_orch_agent_id_here"
+ORCH_BASE_URL = "your_orch_base_url_here"
+
+# Note: SUPABASE_SERVICE_ROLE should be set as a secret:
+# wrangler secret put SUPABASE_SERVICE_ROLE

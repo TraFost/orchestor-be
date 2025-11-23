@@ -1,48 +1,76 @@
-import "dotenv/config";
 import { z } from "zod";
 
-console.log("Loading environment variables...");
-
 const serverSchema = z.object({
-	// Supabase
 	SUPABASE_URL: z.string().min(1),
 	SUPABASE_SERVICE_ROLE: z.string().min(1),
-
-	// Client
 	CLIENT_URL: z.string().min(1),
-
-	// IBM Watson Orchestrate
 	ORCH_API_KEY: z.string().min(1),
 	ORCH_AGENT_ID: z.string().min(1),
 	ORCH_BASE_URL: z.string().min(1),
 });
 
-const _serverEnv = serverSchema.safeParse(process.env);
+export type AppEnv = z.infer<typeof serverSchema>;
 
-if (!_serverEnv.success) {
-	console.error("Invalid environment variables:\n");
-	_serverEnv.error.issues.forEach((issue) => {
-		console.error(issue);
-	});
-	throw new Error("Invalid environment variables");
-}
+let cachedEnv: AppEnv | null = null;
 
-const {
-	SUPABASE_SERVICE_ROLE,
-	SUPABASE_URL,
-	CLIENT_URL,
-	ORCH_API_KEY,
-	ORCH_AGENT_ID,
-	ORCH_BASE_URL,
-} = _serverEnv.data;
+const parseEnv = (input: Record<string, unknown>): AppEnv => {
+	const result = serverSchema.safeParse(input);
 
-export const env = {
-	SUPABASE_SERVICE_ROLE,
-	SUPABASE_URL,
-	CLIENT_URL,
-	ORCH_API_KEY,
-	ORCH_AGENT_ID,
-	ORCH_BASE_URL,
+	if (!result.success) {
+		console.error("Invalid environment variables:\n");
+		result.error.issues.forEach((issue) => {
+			console.error(issue);
+		});
+		throw new Error("Invalid environment variables");
+	}
+
+	return result.data;
 };
 
-console.log("Environment variables loaded");
+export const initEnv = (input?: Record<string, unknown> | null): AppEnv => {
+	if (!input) {
+		throw new Error("No environment variables provided");
+	}
+
+	if (!cachedEnv) {
+		cachedEnv = parseEnv(input);
+		console.log("Environment variables loaded");
+	}
+
+	return cachedEnv;
+};
+
+export const getEnv = (): AppEnv => {
+	if (cachedEnv) {
+		return cachedEnv;
+	}
+
+	const isNode = typeof process !== "undefined" && !!process.env;
+	if (isNode) {
+		return initEnv(process.env as Record<string, unknown>);
+	}
+
+	throw new Error("Environment variables not initialized");
+};
+
+export const env = new Proxy({} as AppEnv, {
+	get(_target, prop) {
+		const current = getEnv();
+		return current[prop as keyof AppEnv];
+	},
+	ownKeys() {
+		return Reflect.ownKeys(getEnv());
+	},
+	getOwnPropertyDescriptor(_target, prop) {
+		const value = getEnv()[prop as keyof AppEnv];
+		if (value === undefined) {
+			return undefined;
+		}
+		return {
+			value,
+			writable: false,
+			enumerable: true,
+			configurable: true,
+		};
+	},
+}) as AppEnv;
