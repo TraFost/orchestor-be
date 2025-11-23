@@ -6,14 +6,14 @@ import { logger } from "hono/logger";
 import { prettyJSON } from "hono/pretty-json";
 import { timing } from "hono/timing";
 
-import errorHandler from "./middlewares/error.middleware";
+import errorHandler from "./middlewares/error.middleware.js";
 
-import authRoutes from "./routes/auth.routes";
-import userRoutes from "./routes/user.routes";
-import tasksRoutes from "./routes/tasks.routes";
-import dashboardRoutes from "./routes/dashboard.routes";
+import authRoutes from "./routes/auth.routes.js";
+import userRoutes from "./routes/user.routes.js";
+import tasksRoutes from "./routes/tasks.routes.js";
+import dashboardRoutes from "./routes/dashboard.routes.js";
 
-import { corsConfig } from "./config/cors.config";
+import { corsConfig } from "./config/cors.config.js";
 
 const app = new Hono()
 	.get("/", (c) =>
@@ -44,4 +44,24 @@ const app = new Hono()
 
 export type AppType = typeof app;
 
-export default app;
+export { app };
+
+export default async (req: any, res: any) => {
+	const url = `https://${req.headers.host || "localhost"}${req.url}`;
+	const method = req.method;
+	const headers = new Headers();
+	for (const [key, value] of Object.entries(req.headers)) {
+		if (Array.isArray(value)) {
+			value.forEach((v) => headers.append(key, v));
+		} else if (typeof value === "string") {
+			headers.set(key, value);
+		}
+	}
+	const body = req.method !== "GET" && req.method !== "HEAD" ? req : undefined;
+	const request = new Request(url, { method, headers, body });
+	const response = await app.fetch(request);
+	res.statusCode = response.status;
+	response.headers.forEach((value, key) => res.setHeader(key, value));
+	const responseBody = await response.text();
+	res.end(responseBody);
+};

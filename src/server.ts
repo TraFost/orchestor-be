@@ -1,7 +1,7 @@
 import { serve } from "@hono/node-server";
 import { showRoutes } from "hono/dev";
 
-import app from "./app";
+import { app } from "./app.js";
 
 console.log(`Server is running on port - ${process.env.PORT || 3000}`);
 
