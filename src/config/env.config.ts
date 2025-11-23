@@ -4,9 +4,6 @@ import { z } from "zod";
 console.log("Loading environment variables...");
 
 const serverSchema = z.object({
-	// Node Server
-	PORT: z.string(),
-
 	// Supabase
 	SUPABASE_URL: z.string().min(1),
 	SUPABASE_SERVICE_ROLE: z.string().min(1),
@@ -33,7 +30,6 @@ if (!_serverEnv.success) {
 const {
 	SUPABASE_SERVICE_ROLE,
 	SUPABASE_URL,
-	PORT,
 	CLIENT_URL,
 	ORCH_API_KEY,
 	ORCH_AGENT_ID,
@@ -44,7 +40,6 @@ export const env = {
 	SUPABASE_SERVICE_ROLE,
 	SUPABASE_URL,
 	CLIENT_URL,
-	PORT: Number(PORT),
 	ORCH_API_KEY,
 	ORCH_AGENT_ID,
 	ORCH_BASE_URL,
