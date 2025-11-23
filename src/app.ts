@@ -22,6 +22,12 @@ const app = new Hono()
 		)
 	)
 	.basePath("/api")
+	.get("/health", (c) =>
+		c.json({
+			status: "ok",
+			timestamp: new Date().toISOString(),
+		})
+	)
 	// Middlewares
 	.use("*", logger())
 	.use("*", cors(corsConfig))

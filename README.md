@@ -45,6 +45,7 @@ A Hono + Supabase API for social media content orchestration, built by AgentBunn
 - `GET /api/dashboard/summary` - Dashboard summary
 - `GET /api/dashboard/today` - Today's posts
 - `GET /api/dashboard/recent` - Recent posts
+- `GET /api/health` - Service health check
 
 ## Project Structure
 
