@@ -59,9 +59,9 @@ export default async (req: any, res: any) => {
 	}
 	const body = req.method !== "GET" && req.method !== "HEAD" ? req : undefined;
 	const request = new Request(url, { method, headers, body });
-	const response = await app.fetch(request);
+	const response = (await app.fetch(request)) as any;
 	res.statusCode = response.status;
-	response.headers.forEach((value, key) => res.setHeader(key, value));
+	response.headers.forEach((value: any, key: any) => res.setHeader(key, value));
 	const responseBody = await response.text();
 	res.end(responseBody);
 };
