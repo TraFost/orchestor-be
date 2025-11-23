@@ -18,7 +18,6 @@ const serverSchema = z.object({
 	ORCH_API_KEY: z.string().min(1),
 	ORCH_AGENT_ID: z.string().min(1),
 	ORCH_BASE_URL: z.string().min(1),
-	ORCH_TOKEN: z.string().min(1),
 });
 
 const _serverEnv = serverSchema.safeParse(process.env);
@@ -39,7 +38,6 @@ const {
 	ORCH_API_KEY,
 	ORCH_AGENT_ID,
 	ORCH_BASE_URL,
-	ORCH_TOKEN,
 } = _serverEnv.data;
 
 export const env = {
@@ -50,7 +48,6 @@ export const env = {
 	ORCH_API_KEY,
 	ORCH_AGENT_ID,
 	ORCH_BASE_URL,
-	ORCH_TOKEN,
 };
 
 console.log("Environment variables loaded");

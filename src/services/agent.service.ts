@@ -1,4 +1,7 @@
+import { StatusCodes } from "http-status-codes";
+
 import { env } from "@/config/env.config";
+import { TokenService } from "@/services/token.service";
 import type { RawTask, PreviewResponse } from "@/types/tasks/tasks.type";
 
 interface PreviewAgentInput {
@@ -38,14 +41,33 @@ export async function previewAgent(
 			`[PreviewAgent] Calling Orchestrate agent for user: ${input.userId}, tasks: ${input.tasks.length}`
 		);
 
-		const res = await fetch(url, {
+		let token = await TokenService.getValidToken();
+
+		let res = await fetch(url, {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
-				Authorization: `Bearer ${env.ORCH_TOKEN}`,
+				Authorization: `Bearer ${token}`,
 			},
 			body: JSON.stringify(payload),
 		});
+
+		if (!res.ok && res.status === StatusCodes.UNAUTHORIZED) {
+			console.warn(
+				"[PreviewAgent] Token unauthorized, refreshing and retrying"
+			);
+			TokenService.forceRefresh();
+			token = await TokenService.getValidToken();
+
+			res = await fetch(url, {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${token}`,
+				},
+				body: JSON.stringify(payload),
+			});
+		}
 
 		if (!res.ok) {
 			const text = await res.text();

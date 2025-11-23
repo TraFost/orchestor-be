@@ -6,6 +6,7 @@ import type { StatusCode } from "hono/utils/http-status";
 
 import authMiddleware from "@/middlewares/auth.middleware";
 import { zValidator } from "@/middlewares/zod-validator.middleware";
+import tokenMiddleware from "@/middlewares/token.middleware";
 
 import { TasksService } from "@/services/tasks.service";
 import { ScheduleService } from "@/services/schedules.service";
@@ -34,20 +35,25 @@ const tasksRoutes = new Hono<{ Variables: Variables }>()
 
 		return c.json(result);
 	})
-	.post("/preview", zValidator("json", PreviewRequestDto), async (c) => {
-		const user = c.get("user");
-		const { tasks } = c.req.valid("json");
+	.post(
+		"/preview",
+		tokenMiddleware,
+		zValidator("json", PreviewRequestDto),
+		async (c) => {
+			const user = c.get("user");
+			const { tasks } = c.req.valid("json");
 
-		const result = await TasksService.previewAgent(user.id, tasks);
+			const result = await TasksService.previewAgent(user.id, tasks);
 
-		if (result.status !== StatusCodes.OK) {
-			throw new HTTPException(result.status as StatusCode, {
-				message: result.message,
-			});
+			if (result.status !== StatusCodes.OK) {
+				throw new HTTPException(result.status as StatusCode, {
+					message: result.message,
+				});
+			}
+
+			return c.json(result);
 		}
-
-		return c.json(result);
-	})
+	)
 	.post("/schedule", zValidator("json", ScheduleRequestDto), async (c) => {
 		const user = c.get("user");
 
